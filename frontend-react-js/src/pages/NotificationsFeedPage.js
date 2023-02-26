@@ -10,7 +10,7 @@ import ReplyForm from '../components/ReplyForm';
 // [TODO] Authenication
 import Cookies from 'js-cookie'
 
-export default function NotificationsPage() {
+export default function NotificationsFeedPage() {
   const [activities, setActivities] = React.useState([]);
   const [popped, setPopped] = React.useState(false);
   const [poppedReply, setPoppedReply] = React.useState(false);
@@ -20,7 +20,7 @@ export default function NotificationsPage() {
 
   const loadData = async () => {
     try {
-      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/notifications`
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/notifications
       const res = await fetch(backend_url, {
         method: "GET"
       });
