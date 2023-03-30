@@ -2,6 +2,9 @@ from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
 import os
+import watchtower
+import logging
+from time import strftime
 
 from services.home_activities import *
 from services.notifications_activities import *
@@ -13,6 +16,21 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
+
+# Configuring Logger to Use CloudWatch
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
+LOGGER.addHandler(console_handler)
+LOGGER.addHandler(cw_handler)
+LOGGER.info("some message")
+
+@app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    return response
 
 #XRAY
 from aws_xray_sdk.core import xray_recorder
